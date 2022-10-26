@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
             .route("/", web::get().to(|| async { "Epic AI Magic" }))
             .service(completion)
     })
-    .bind(("127.0.0.1", 80))?
+    .bind(("0.0.0.0", 80))?
     .run()
     .await
 }
