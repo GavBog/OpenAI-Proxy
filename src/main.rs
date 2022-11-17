@@ -5,6 +5,7 @@ use hyper::{header, Body, Client, Request};
 use hyper_tls::HttpsConnector;
 use serde_derive::{Deserialize, Serialize};
 use sqlx::postgres::PgPoolOptions;
+use sqlx::Row;
 
 #[derive(Deserialize)]
 struct OpenAiChoices {
@@ -56,6 +57,11 @@ async fn index(
         .await;
     if userdata.is_err() {
         return Ok(format!("User not found! Try logging in again."));
+    }
+    let user = userdata.unwrap();
+    let premium: bool = user.get("premium");
+    if premium == false {
+        return Ok(format!("You are don't have premium access!"));
     }
 
     let https = HttpsConnector::new();
